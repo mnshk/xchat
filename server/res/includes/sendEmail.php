@@ -11,12 +11,12 @@ function sendEmail($from, $to, $subject, $body)
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'web.munish.ml@gmail.com';
-        $mail->Password = 'imasmclydhfrwvkw';
+        $mail->Username = '*******************';
+        $mail->Password = '**********';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
         $mail->isHTML(true);
-        $mail->setFrom('web.munish.ml@gmail.com', $from);
+        $mail->setFrom('*********', $from);
         $mail->addAddress($to);
         $mail->Subject = $subject;
         $mail->Body = $body;
