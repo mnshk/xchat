@@ -1,0 +1,17 @@
+{
+  "short_name": "XCHAT",
+  "name": "XCHAT",
+  "icons": [
+    {
+      "src": "./res/media/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": ".",
+  "theme_color": "#FFFFFF",
+  "description": "XCHAT"
+}
