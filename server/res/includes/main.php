@@ -15,7 +15,9 @@ $res = array(
     "message" => "",
     "data" => array()
 );
+
 $req;
+
 $serverPath = $_SERVER['DOCUMENT_ROOT'] . "/XCHAT/v1.0.0/server/";
 // $serverPath = $_SERVER['DOCUMENT_ROOT'] . "/XCHAT/server/";
 $serverURL = "https://munish11.000webhostapp.com/XCHAT/v1.0.0/server/";
@@ -43,6 +45,7 @@ function error($message, $data = array())
     exit();
 }
 
+// local dev
 // $db = new mysqli("localhost", "root", "", "xchat");
 $db = new mysqli("localhost", "id18681443_root", "F8tE^mS*]*/3q{&N", "id18681443_xchat");
 
