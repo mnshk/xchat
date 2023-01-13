@@ -77,7 +77,11 @@ $(window).on("load", () => {
 
     $(".other-user-profile-icon").css("background-image", `url('${activeUserData.profileIconPath}')`);
 
-    $("#image_0001").attr("src", `res/media/${currentTheme}/empty-box.png`);
+    if(currentTheme == "theme-dark"){
+        $("#image_0001").attr("src", `res/media/theme-dark/empty-box.png`);
+    } else {
+        $("#image_0001").attr("src", `res/media/theme-light/empty-box.png`);
+    }
 });
 // navigator.serviceWorker.onmessage = function (event) {
 //     if (debug) {
@@ -434,7 +438,11 @@ function prepareActivity(id) {
         case "activity-create-new-group":
             if (!isProfilePremium) {
                 $("#activity-create-new-group-container").addClass("d-none");
-                $("#activity-create-new-group-non-premium-container").html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+                if(currentTheme == "theme-dark"){
+                    $("#activity-create-new-group-non-premium-container").html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/theme-dark/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+                } else {
+                    $("#activity-create-new-group-non-premium-container").html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/theme-light/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+                }
             } else {
                 $("#activity-create-new-group-container").removeClass("d-none");
                 $("#activity-create-new-group-non-premium-container").empty();
@@ -727,7 +735,11 @@ function friendsActivity(moveToActivity = true) {
     }
     getProfileConnections((connections) => {
         const container = $("#activity-friends-friends-container");
-        container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Friends Yet</div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center"><img src="res/media/theme-dark/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Friends Yet</div></div>`);
+        } else {
+            container.html(`<div class="dead-center"><img src="res/media/theme-light/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Friends Yet</div></div>`);
+        }
         if (connections.length > 0) {
             let first = true;
             connections.forEach((element) => {
@@ -752,7 +764,11 @@ function friendsActivity(moveToActivity = true) {
     });
     let container = $("#activity-friends-groups-container");
     if (isProfilePremium) {
-        container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Groups Yet</div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center"><img src="res/media/theme-dark/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Groups Yet</div></div>`);
+        } else {
+            container.html(`<div class="dead-center"><img src="res/media/theme-light/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Groups Yet</div></div>`);
+        }
         getGroupConnections((connections) => {
             if (connections.length > 0) {
                 let first = true;
@@ -1036,7 +1052,11 @@ function getProfileConversations() {
                     putProfileConversationCard(conversation, container);
                 });
             } else {
-                container.html(`<div class="dead-center text-center p-5"><img src="res/media/${currentTheme}/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Messages, yet.</div><div class="fs-12" style="color: #a0a0a0;">No messages in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
+                if(currentTheme == "theme-dark"){
+                    container.html(`<div class="dead-center text-center p-5"><img src="res/media/theme-dark/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Messages, yet.</div><div class="fs-12" style="color: #a0a0a0;">No messages in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
+                } else {
+                    container.html(`<div class="dead-center text-center p-5"><img src="res/media/theme-light/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Messages, yet.</div><div class="fs-12" style="color: #a0a0a0;">No messages in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
+                }
             }
             getProfileConversationsLock = false;
         }
@@ -1118,13 +1138,21 @@ function getGroupConversations() {
                         });
                     });
                 } else {
-                    container.html(`<div class="dead-center text-center p-5"><img src="res/media/${currentTheme}/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Groups, yet.</div><div class="fs-12" style="color: #a0a0a0;">No groups in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
+                    if(currentTheme == "theme-dark"){
+                        container.html(`<div class="dead-center text-center p-5"><img src="res/media/theme-dark/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Groups, yet.</div><div class="fs-12" style="color: #a0a0a0;">No groups in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
+                    } else {
+                        container.html(`<div class="dead-center text-center p-5"><img src="res/media/theme-light/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Groups, yet.</div><div class="fs-12" style="color: #a0a0a0;">No groups in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
+                    }
                 }
                 getGroupConversationsLock = false;
             }
         );
     } else {
-        container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/theme-dark/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+        } else {
+            container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/theme-light/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+        }
     }
 }
 function getMyGroups() {
@@ -1494,7 +1522,11 @@ function profileSubscriptions() {
                             container.append(`<div class="col-sm-12 col-md-6 col-lg-4"><div class="text-light m-4 my-2 p-4 py-4 shadow click-scale-animation" style="${cardStyle}"><div class="d-flex"><div class="d-flex flex-column align-items-end"><div class="fs-20 fw-600">${subscriptionType}</div></div><div class="flex-grow-1"></div><div>${duration}</div></div><div class="d-flex mt-4 fs-12"><div class="text-center flex-grow-1">Purchased on<br>${getFormattedDate(subscription.subscriptionStartedOn)}</div><div class="text-center flex-grow-1">Expires on<br>${getFormattedDate(subscription.subscriptionEndsOn)}</div></div></div></div>`);
                         }
                     } else {
-                        container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="height: 150px;"></div>`);
+                        if(currentTheme == "theme-dark"){
+                            container.html(`<div class="dead-center"><img src="res/media/theme-dark/empty-box.png" style="height: 150px;"></div>`);
+                        } else {
+                            container.html(`<div class="dead-center"><img src="res/media/theme-light/empty-box.png" style="height: 150px;"></div>`);
+                        }
                     }
                 }
             );
@@ -1676,7 +1708,11 @@ function requestsActivity(moveToActivity = true) {
 
     getProfileConnections((connections) => {
         let container = $("#activity-requests-friend-requests-container");
-        container.html(`<div class="dead-center p-2"><img src="res/media/${currentTheme}/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center p-2"><img src="res/media/theme-dark/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        } else {
+            container.html(`<div class="dead-center p-2"><img src="res/media/theme-light/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        }
         if (connections.length) {
             let first = true;
             connections.forEach((element) => {
@@ -1698,7 +1734,11 @@ function requestsActivity(moveToActivity = true) {
     let container2 = $("#activity-requests-group-invites-container");
 
     if (isProfilePremium) {
-        container2.html(`<div class="dead-center p-2"><img src="res/media/${currentTheme}/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        if(currentTheme == "theme-dark"){
+            container2.html(`<div class="dead-center p-2"><img src="res/media/theme-dark/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        } else {
+            container2.html(`<div class="dead-center p-2"><img src="res/media/theme-light/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        }
         getGroupConnections((connections) => {
             if (connections.length) {
                 let first = true;
@@ -1724,7 +1764,11 @@ function requestsActivity(moveToActivity = true) {
     let container = $("#activity-requests-group-join-requests-container");
 
     if (isProfilePremium) {
-        container.html(`<div class="dead-center p-2"><img src="res/media/${currentTheme}/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center p-2"><img src="res/media/theme-dark/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        } else {
+            container.html(`<div class="dead-center p-2"><img src="res/media/theme-light/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Requests</div></div>`);
+        }
         requestServer(
             "api/getGroupJoinRequests/",
             {
@@ -1774,7 +1818,11 @@ function searchProfilesGroupInvite(keyword) {
             },
             (data) => {
                 if (!data.length) {
-                    container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    if(currentTheme == "theme-dark"){
+                        container.html(`<div class="dead-center"><img src="res/media/theme-dark/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    } else {
+                        container.html(`<div class="dead-center"><img src="res/media/theme-light/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    }
                 } else {
                     container.html("");
                     for (let i = 0; i < data.length; i++) {
@@ -1799,7 +1847,11 @@ function searchProfilesGroupInvite(keyword) {
             }
         );
     } else {
-        container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center"><img src="res/media/theme-dark/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        } else {
+            container.html(`<div class="dead-center"><img src="res/media/theme-light/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        }
     }
     searchProfilesGroupInviteLock = false;
 }
@@ -1816,7 +1868,11 @@ function searchProfiles(keyword) {
             },
             (data) => {
                 if (!data.length) {
-                    container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    if(currentTheme == "theme-dark"){
+                        container.html(`<div class="dead-center"><img src="res/media/theme-dark/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    } else {
+                        container.html(`<div class="dead-center"><img src="res/media/theme-light/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    }
                 } else {
                     container.html("");
                     for (let i = 0; i < data.length; i++) {
@@ -1827,13 +1883,21 @@ function searchProfiles(keyword) {
             }
         );
     } else {
-        container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center"><img src="res/media/theme-dark/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        } else {
+            container.html(`<div class="dead-center"><img src="res/media/theme-light/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        }
     }
 }
 function searchGroups(keyword) {
     const container = $("#tabGroupSearchResult");
     if (!isProfilePremium) {
-        container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/theme-dark/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+        } else {
+            container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/theme-light/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+        }
         return;
     }
     if (keyword) {
@@ -1847,7 +1911,11 @@ function searchGroups(keyword) {
             },
             (data) => {
                 if (!data.length) {
-                    container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    if(currentTheme == "theme-dark"){
+                        container.html(`<div class="dead-center"><img src="res/media/theme-dark/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    } else {
+                        container.html(`<div class="dead-center"><img src="res/media/theme-light/no-results-found.png" style="width: 200px;"><div class="fs-12 fw-500 text-muted">No match found</div><div class="p-5"></div></div>`);
+                    }
                 } else {
                     container.html("");
                     for (let i = 0; i < data.length; i++) {
@@ -1858,7 +1926,11 @@ function searchGroups(keyword) {
             }
         );
     } else {
-        container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        if(currentTheme == "theme-dark"){
+            container.html(`<div class="dead-center"><img src="res/media/theme-dark/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        } else {
+            container.html(`<div class="dead-center"><img src="res/media/theme-light/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
+        }
     }
 }
 function sendProfileMessage(event, messageType) {
