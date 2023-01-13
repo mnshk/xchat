@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>XCHAT</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="./res/media/icon.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="res/css/index.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.2.0/bcrypt.min.js"
+        integrity="sha512-BJZhA/ftU3DVJvbBMWZwp7hXc49RJHq0xH81tTgLlG16/OkDq7VbNX6nUnx+QY4bBZkXtJoG0b0qihuia64X0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- <script type="module" src="res/js/bcrypt.min.js"></script> -->
+    <script src="res/js/index.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+
+<body class="theme-light">
+
+
+
+    <!-- activity-dashboard -->
+    <div class="activity" id="activity-dashboard">
+        <div class="app-bar">
+            <div class="app-bar-label">
+                <div class="">Messages</div>
+            </div>
+            <button class="app-bar-control" onclick="popup('popup-menu-dashboard')">more_horiz</button>
+        </div>
+        <div class="activity-body">
+
+            <div class="tab-wrapper" id="dashboardTabs">
+
+                <div class="tab-header-container" id="dashboardTabsHeader">
+                    <div class="tab-header tab-header-active" onclick="tabs('dashboardTabs', 0, this)">Chats</div>
+                    <div class="tab-header" onclick="tabs('dashboardTabs', 1, this)">Groups</div>
+                </div>
+                <div class="positon-relative">
+                    <div class="tab-container pt-3" id="dashboardTabsContainer">
+                        <div class="tab d-flex flex-column" id="activity-dashboard-profile-conversations-container">
+                        </div>
+                        <div class="tab d-flex flex-column" id="activity-dashboard-group-conversations-container"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- activity-search -->
+    <div class="activity" id="activity-search">
+        <div class=" app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Search</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="flex-grow-1 d-flex flex-column">
+                <div class="">
+
+                    <div class="border flex-grow-1 mx-3 d-flex" style="border-radius: 10px;">
+                        <input type="text" placeholder="Type to search" class="border-0 w-100 flex-grow-1 mx-4 fs-12"
+                            style="outline: none; background-color: transparent;" id="activity-search-search-box"
+                            onkeyup="searchProfiles(this.value); searchGroups(this.value);">
+                        <div class="material-icons text-secondary p-2 d-flex align-items-center justify-content-center"
+                            style="border-radius: 4px; font-size: 18px;">search</div>
+                    </div>
+                </div>
+                <div class="tab-wrapper" id="searchActivityTabs">
+                    <div class="tab-header-container" id="searchActivityTabsHeader">
+                        <div class="tab-header tab-header-active" onclick="tabs('searchActivityTabs', 0, this)">People
+                        </div>
+                        <div class="tab-header" onclick="tabs('searchActivityTabs', 1, this)">Groups</div>
+                    </div>
+                    <div class="positon-relative">
+                        <div class="tab-container pt-3" id="searchActivityTabsContainer">
+                            <div class="tab" id="tabProfileSearchResult">
+                                <div class="dead-center">
+                                    <img src="res/media/theme-light/empty-box.png" style="width: 150px;">
+                                    <div class="fs-12 fw-500 text-muted">Start typing in the search box</div>
+                                    <div class="p-5"></div>
+                                </div>
+                            </div>
+                            <div class="tab" id="tabGroupSearchResult">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- activity-group-message-delivery-status -->
+    <div class="activity" id="activity-group-message-delivery-status">
+        <div class=" app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Delivery Status</div>
+            </div>
+        </div>
+        <div class="activity-body" id="activity-group-message-delivery-status-wrapper"></div>
+    </div>
+
+
+
+
+
+
+
+    <!-- activity-profile -->
+    <div class="activity" id="activity-profile-page">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div id="activity-profile-page-label">Profile</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-column flex-grow-1">
+                <div class="d-flex p-5 align-items-center py-4">
+                    <div class="other-profile-icon profile-page-profile-icon"></div>
+                    <div class="mx-3"></div>
+                    <div class="overflow-auto d-flex flex-column">
+                        <div class="fw-600 fs-20 other-profile-name flex-shrink-0"></div>
+                        <div class="other-profile-username flex-shrink-0"></div>
+                    </div>
+                </div>
+                <div class="px-5 py-3">
+                    <div class="fw-600 fs-16 mb-2">Description</div>
+                    <p class="other-profile-description"></p>
+                </div>
+                <div class="px-5 py-3 d-flex" id="activityProfilePageControls" style="max-width: 500px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-group-page -->
+    <div class="activity" id="activity-group-page">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div id="activity-profile-page-label">Group</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-column flex-grow-1">
+                <div class="d-flex p-5 align-items-center py-4">
+                    <div class="other-group-icon profile-page-profile-icon"></div>
+                    <div class="mx-3"></div>
+                    <div class="overflow-auto d-flex flex-column">
+                        <div class="fw-600 fs-20 other-group-name flex-shrink-0"></div>
+                        <div class="other-group-username flex-shrink-0"></div>
+                    </div>
+                </div>
+                <div class="px-5 py-3">
+                    <div class="fw-600 fs-16 mb-2">Description</div>
+                    <p class="other-group-description"></p>
+                </div>
+                <div class="px-5 py-3 d-flex" id="activityGroupPageControls" style="max-width: 500px;">
+                </div>
+                <div class="py-4">
+                    <div class="fw-500 fs-16 px-5 py-3 d-flex">
+                        <div class="flex-grow-1">Group Members</div>
+                    </div>
+                    <div id="activity-group-page-group-members-container">
+                        <div class="dead-center p-4 fs-12 text-secondary">No Results found</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-messaging-view -->
+    <div class="activity" id="activity-messaging-view">
+        <div class="app-bar app-bar-border">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="profile-card-image" onclick="" id="activity-messaging-profile-icon"></div>
+            <div class="app-bar-label flex-column justify-content-center align-items-start">
+                <div class="fs-15" id="activity-messaging-profile-name"></div>
+                <div class="fs-11 text-secondary fw-500" id="activity-messaging-profile-username"></div>
+            </div>
+            <button class="app-bar-control" onclick="popup('popup-messaging-view');">more_horiz</button>
+        </div>
+        <div class="activity-body">
+            <div class="messages-wrapper" id="activity-messaging-messages-wrapper" style="overflow: auto;"></div>
+        </div>
+        <form class="app-bar" onsubmit="sendProfileMessage(event, 'text');">
+            <div class="border w-100 p-1 d-flex align-items-center" style="border-radius: 25px;">
+                <input class="border-0 flex-grow-1 p-2 w-100 mx-2 send-message-input-field"
+                    id="activity-messaging-message-input" placeholder="Type message..." style="outline: none;"
+                    type="text" name="" id="">
+                <button type="button" class="send-more-icon btn btn-secondary"
+                    onclick="popup('popup-menu-send-message-more')">more_horiz</button>
+                <button class="btn btn-secondary material-icons" type="submit"
+                    style="border-radius: 25px; font-size: 20px;">arrow_forward</button>
+            </div>
+            <div>
+                <input type="file" id="activity-messaging-message-file"
+                    onchange="activityMessagingFileSendOnChange(event)" name="messageFile" hidden>
+            </div>
+        </form>
+    </div>
+
+    <!-- activity-group-messaging-view -->
+    <div class="activity" id="activity-group-messaging-view">
+        <div class="app-bar app-bar-border">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="profile-card-image" onclick="" id="activity-messaging-group-icon"></div>
+            <div class="app-bar-label flex-column justify-content-center align-items-start">
+                <div class="fs-15" id="activity-messaging-group-name"></div>
+                <div class="fs-11 text-secondary fw-500" id="activity-messaging-group-username"></div>
+            </div>
+            <button class="app-bar-control" onclick="popup('popup-messaging-view');">more_horiz</button>
+        </div>
+        <div class="activity-body">
+            <div class="messages-wrapper" id="activity-messaging-group-messages-wrapper" style="overflow: auto;"></div>
+        </div>
+        <form class="app-bar" onsubmit="sendGroupMessage(event, 'text');">
+            <div class="border w-100 p-1 d-flex align-items-center" style="border-radius: 25px;">
+                <input class="border-0 flex-grow-1 p-2 w-100 mx-2 send-message-input-field"
+                    id="activity-messaging-message-input-2" placeholder="Type message..." style="outline: none;"
+                    type="text" name="" id="">
+                <button type="button" class="send-more-icon btn btn-secondary"
+                    onclick="popup('popup-menu-send-group-message-more')">more_horiz</button>
+                <button class="btn btn-secondary material-icons" type="submit"
+                    style="border-radius: 25px; font-size: 20px;">arrow_forward</button>
+            </div>
+            <div>
+                <input type="file" id="activity-messaging-message-file-2"
+                    onchange="activityGroupMessagingFileSendOnChange(event)" name="messageFile" hidden>
+            </div>
+        </form>
+    </div>
+
+    <!-- activity-friends -->
+    <div class="activity" id="activity-friends">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Friends</div>
+            </div>
+        </div>
+        <div class="activity-body" id="">
+            <div class="fw-500" style="padding: 8px 30px;">Friends</div>
+            <div id="activity-friends-friends-container"></div>
+            <div class="fw-500 mt-4" style="padding: 8px 30px;">Groups</div>
+            <div id="activity-friends-groups-container"></div>
+        </div>
+    </div>
+
+    <!-- activity-media-preview -->
+    <div class="activity" id="activity-media-preview">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div id="activity-media-preview-media-name"></div>
+            </div>
+        </div>
+        <div class="activity-body d-flex align-items-center justify-content-center"
+            id="activity-media-preview-container"></div>
+        <div id="activity-media-preview-controls"></div>
+    </div>
+
+    <!-- activity-groups -->
+    <div class="activity" id="activity-groups">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Groups</div>
+            </div>
+            <button class="app-bar-control" onclick="popup('popup-menu-groups')">more_horiz</button>
+        </div>
+        <div class="activity-body" id="activity-groups-my-groups-container">
+            <div class="dead-center">No groups yet</div>
+        </div>
+    </div>
+
+    <!-- activity-create-new-groups -->
+    <div class="activity" id="activity-create-new-group">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>New Group</div>
+            </div>
+            <!-- <button class="app-bar-control" onclick="popup('popup-menu-groups')">more_horiz</button> -->
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-column flex-grow-1 align-items-center p-5" id="activity-create-new-group-container">
+                <div class="w-100" style="max-width: 300px;">
+                    <!-- <div class="fs-24 fw-600 mb-5">Setup Your Profile</div> -->
+                    <form method="post" enctype="multipart/form-data" onsubmit="createNewGroup(event)">
+                        <div class="form-group mb-4 d-flex flex-column align-items-center justify-content-center">
+                            <label for="group_icon_select" class="form-label profile-picture-label">
+                                <div class="profile-picture-placeholder group-icon-placeholder"></div>
+                                <div class="material-icons profile-picture-select-icon">photo_camera</div>
+                            </label>
+                            <input type="file" id="group_icon_select" name="group_icon" class="form-control" hidden
+                                accept="image/*" onchange="inputImagePreview(event, $('.group-icon-placeholder'));">
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="group_name_input" class="form-label fw-600">Group Name</label>
+                            <input type="text" id="group_name_input" name="group_name" class="form-control m-input"
+                                onfocus="$(this).removeClass('is-invalid');$('#create_group_submit_button').removeClass('disabled')">
+                            <small class="invalid-feedback">
+                                Please enter a group name.
+                            </small>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="group_username_input" class="form-label fw-600">Group Handler (Username)</label>
+                            <input type="text" id="group_username_input" name="group_username"
+                                class="form-control m-input"
+                                onfocus="$(this).removeClass('is-invalid');$('#create_group_submit_button').removeClass('disabled')">
+                            <small class="invalid-feedback" id="group-username-invalid-feedback">
+                                Please enter a group handler.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-danger shadow-sm w-100" id="create_group_submit_button"
+                                type="submit">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="flex-grow-1 display-flex" id="activity-create-new-group-non-premium-container"></div>
+        </div>
+    </div>
+
+
+
+    <!-- activity-invite-to-group -->
+    <div class="activity" id="activity-add-to-group">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Add to group</div>
+            </div>
+            <button class="app-bar-control" onclick="activity('activity-dashboard');">done</button>
+        </div>
+        <div class="activity-body">
+            <div class="flex-grow-1 d-flex flex-column">
+                <div class="">
+                    <div class="border flex-grow-1 mx-3 d-flex" style="border-radius: 10px;">
+                        <input type="text" placeholder="Type to search" class="border-0 w-100 flex-grow-1 mx-4 fs-12"
+                            style="outline: none; background-color: transparent;"
+                            id="activity-add-to-group-search-input" onkeyup="searchProfilesGroupInvite(this.value);">
+                        <div class="material-icons text-secondary p-2 d-flex align-items-center justify-content-center"
+                            style="border-radius: 4px; font-size: 18px;">search</div>
+                    </div>
+                </div>
+                <div class="flex-grow-1 mt-3" id="groupInviteSearchResults"></div>
+            </div>
+        </div>
+    </div>
+    <!-- activity-manage-group-members -->
+    <div class="activity" id="activity-manange-group-members">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Manage members</div>
+            </div>
+        </div>
+        <div class="activity-body" id="activity-manage-group-members-container">
+
+        </div>
+    </div>
+    <!-- activity-requests -->
+    <div class="activity" id="activity-requests">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Requests and Invites</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="p-2"></div>
+            <div class="fw-500" style="padding: 8px 30px;">Friend Requests</div>
+            <div id="activity-requests-friend-requests-container" class=""></div>
+            <div class="fw-500" style="padding: 8px 30px;">Group Invitations</div>
+            <div id="activity-requests-group-invites-container" class=""></div>
+            <div class="fw-500" style="padding: 8px 30px;">Group Join Requests</div>
+            <div id="activity-requests-group-join-requests-container" class="">
+                <div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5">
+                    <span class="text-center fs-12 text-secondary mb-3">
+                        Oops! your current subscription plan does not includes Group Messaging.
+                    </span>
+                    <button class="btn btn-outline-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get
+                        Premium</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- activity-my-account -->
+    <div class="activity" id="activity-my-account">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>My Account</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="p-2">
+                <div class="form-group mb-4 d-flex flex-column align-items-center justify-content-center">
+                    <label for="profile-details-icon-input" class="form-label profile-picture-label">
+                        <div class="activity-my-account-profile-picture-placeholder profile-picture-placeholder"
+                            id="profile-details-icon"></div>
+                    </label>
+                    <input type="file" id="profile-details-icon-input" name="profileIcon" class="form-control" hidden
+                        accept="image/*"
+                        onchange="inputImagePreview(event, $('.activity-my-account-profile-picture-placeholder'));">
+                </div>
+                <div class="px-5">
+
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Name</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <input type="text" class="form-control m-input fw-600 fs-16" id="profile-details-name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Description</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <textarea class="form-control m-input fw-600" id="profile-details-description"
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Profile Picture visibility</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <select class="form-select m-input fw-600" id="profile-details-icon-visibility">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Description visibility</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <select class="form-select m-input fw-600" id="profile-details-description-visibility">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Account Privacy</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <select class="form-select m-input fw-600" id="profile-details-access-type">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                    <option value="hidden">Hidden</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <button class="btn btn-danger w-100" onclick="updateProfileDetails();">Update</button>
+                    <div class="p-2"></div>
+                    <button class="btn btn-outline-danger btn-sm w-100" onclick="removeProfilePhoto('profile');"
+                        id="removeProfilePhotoButton">Remove Photo</button>
+                </div>
+            </div>
+
+            <!-- <div class="p-5">
+                <form action="">
+                    <label for="activity-my-account"></label>
+                    <input class="form-control" type="text">
+                </form>
+            </div> -->
+        </div>
+    </div>
+    <!-- activity-group-details -->
+    <div class="activity" id="activity-group-details">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>My Account</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="p-2">
+                <div class="form-group mb-4 d-flex flex-column align-items-center justify-content-center">
+                    <label for="group-details-icon-input" class="form-label profile-picture-label">
+                        <div class="activity-my-account-group-picture-placeholder profile-picture-placeholder"
+                            id="group-details-icon"></div>
+                    </label>
+                    <input type="file" id="group-details-icon-input" name="groupIcon" class="form-control" hidden
+                        accept="image/*"
+                        onchange="inputImagePreview(event, $('.activity-my-account-group-picture-placeholder'));">
+                </div>
+                <div class="px-5">
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Name</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <input type="text" class="form-control m-input fw-600 fs-16" id="group-details-name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Description</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <textarea class="form-control m-input fw-600" id="group-details-description"
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Group Icon visibility</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <select class="form-select m-input fw-600" id="group-details-icon-visibility">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Description visibility</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <select class="form-select m-input fw-600" id="group-details-description-visibility">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper-1">
+                        <div class="item-wrapper-1-div-1">
+                            <div class="item-wrapper-1-div-1-1">Account Privacy</div>
+                            <div class="item-wrapper-1-div-1-2">
+                                <select class="form-select m-input fw-600" id="group-details-access-type">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                    <option value="hidden">Hidden</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <button class="btn btn-danger w-100" onclick="updateGroupDetails();">Update</button>
+                    <div class="p-2"></div>
+                    <button class="btn btn-outline-danger btn-sm w-100" onclick="removeProfilePhoto('group');"
+                        id="removeGroupPhotoButton">Remove Photo</button>
+                </div>
+            </div>
+
+            <!-- <div class="p-5">
+                <form action="">
+                    <label for="activity-my-account"></label>
+                    <input class="form-control" type="text">
+                </form>
+            </div> -->
+        </div>
+    </div>
+
+
+    <!-- popup-menu-dashboard -->
+    <div class="popup" id="popup-menu-dashboard">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <button class="menu-item" onclick="activity('activity-requests');">
+                    <div class="menu-item-icon">favorite_outline</div>
+                    <div class="menu-item-label">Activity and Requests</div>
+                </button>
+                <button class="menu-item" onclick="activity('activity-friends');">
+                    <div class="menu-item-icon">workspaces</div>
+                    <div class="menu-item-label">Groups and Friends</div>
+                </button>
+                <button class="menu-item" onclick="activity('activity-search')">
+                    <div class="menu-item-icon">search</div>
+                    <div class="menu-item-label">Search</div>
+                </button>
+                <button class="menu-item" onclick="activity('activity-create-new-group');">
+                    <div class="menu-item-icon">group_add</div>
+                    <div class="menu-item-label">Create New Group</div>
+                </button>
+                <button class="menu-item" onclick="activity('activity-settings')">
+                    <div class="menu-item-icon">settings</div>
+                    <div class="menu-item-label">Settings</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-menu-send-message-more -->
+    <div class="popup" id="popup-menu-send-message-more">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <label for="activity-messaging-message-file" class="menu-item"
+                    onclick="activityMessagingMessageType = 'image'; $('#activity-messaging-message-file').attr('accept','image\/\*');">
+                    <div class="menu-item-icon">image</div>
+                    <div class="menu-item-label">Share image</div>
+                </label>
+                <label for="activity-messaging-message-file" class="menu-item"
+                    onclick="activityMessagingMessageType = 'video'; $('#activity-messaging-message-file').attr('accept','video\/\*');">
+                    <div class="menu-item-icon">movie</div>
+                    <div class="menu-item-label">Share video</div>
+                </label>
+                <label for="activity-messaging-message-file" class="menu-item"
+                    onclick="activityMessagingMessageType = 'document'; $('#activity-messaging-message-file').attr('accept','\*');">
+                    <div class="menu-item-icon">description</div>
+                    <div class="menu-item-label">Share document</div>
+                </label>
+                <button class="menu-item" onclick="sendProtectedText('profile')">
+                    <div class="menu-item-icon">lock</div>
+                    <div class="menu-item-label">Protected Text</div>
+                </button>
+                <label class="menu-item" for="protected-document-input-profile">
+                    <div class="menu-item-icon">lock</div>
+                    <div class="menu-item-label">Protected Document</div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-menu-send-group-message-more -->
+    <div class="popup" id="popup-menu-send-group-message-more">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <label for="activity-messaging-message-file-2" class="menu-item"
+                    onclick="activityMessagingMessageType = 'image'; $('#activity-messaging-message-file-2').attr('accept','image\/\*');">
+                    <div class="menu-item-icon">image</div>
+                    <div class="menu-item-label">Share image</div>
+                </label>
+                <label for="activity-messaging-message-file-2" class="menu-item"
+                    onclick="activityMessagingMessageType = 'video'; $('#activity-messaging-message-file-2').attr('accept','video\/\*');">
+                    <div class="menu-item-icon">movie</div>
+                    <div class="menu-item-label">Share video</div>
+                </label>
+                <label for="activity-messaging-message-file-2" class="menu-item"
+                    onclick="activityMessagingMessageType = 'document'; $('#activity-messaging-message-file-2').attr('accept','\*');">
+                    <div class="menu-item-icon">description</div>
+                    <div class="menu-item-label">Share document</div>
+                </label>
+                <button class="menu-item" onclick="sendProtectedText('group')">
+                    <div class="menu-item-icon">lock</div>
+                    <div class="menu-item-label">Protected Text</div>
+                </button>
+                <label for="protected-document-input-group" class="menu-item">
+                    <div class="menu-item-icon">lock</div>
+                    <div class="menu-item-label">Protected Document</div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-message-context -->
+    <div class="popup" id="popup-message-context">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <button class="menu-item" onclick="deleteMessage(event);">
+                    <div class="menu-item-icon">delete</div>
+                    <div class="menu-item-label">Delete message</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-group-message-context -->
+    <div class="popup" id="popup--group-message-context">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <button class="menu-item" onclick="deleteMessage(event);">
+                    <div class="menu-item-icon">delete</div>
+                    <div class="menu-item-label">Delete message</div>
+                </button>
+                <button class="menu-item" onclick="getMessageDeliveryStatus(event);">
+                    <div class="menu-item-icon">update</div>
+                    <div class="menu-item-label">Delivery Status</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-messaging-view -->
+    <div class="popup" id="popup-messaging-view">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <!-- <button class="menu-item" onclick="">
+                    <div class="menu-item-icon">delete</div>
+                    <div class="menu-item-label">Delete conversation</div>
+                </button> -->
+                <button class="menu-item" onclick="deleteConnectionConfirm(otherUserData.profileID)">
+                    <div class="menu-item-icon">cancel</div>
+                    <div class="menu-item-label">Remove friend</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-menu-groups -->
+    <div class="popup" id="popup-menu-group-page-manage">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <div class="popup-window">
+            <div class="overflow-auto" style="margin-right: 10px;">
+                <button class="menu-item" onclick="activity('activity-group-details');">
+                    <div class="menu-item-icon">edit</div>
+                    <div class="menu-item-label">Edit Group</div>
+                </button>
+                <button class="menu-item" onclick="activity('activity-add-to-group')">
+                    <div class="menu-item-icon">group_add</div>
+                    <div class="menu-item-label">Add Members</div>
+                </button>
+                <button class="menu-item" onclick="activity('activity-manange-group-members')">
+                    <div class="menu-item-icon">delete</div>
+                    <div class="menu-item-label">Remove Members</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup-message -->
+    <div class="popup" id="popup-message">
+        <div class="popup-backdrop" id="popup-message-backdrop" onclick="popup();"></div>
+        <div class="popup-window px-5">
+            <div class="fs-20 fw-600 text-dark flex-shrink-0" id="popup-message-label">[label]</div>
+            <div class="text-dark mt-3 overflow-auto" id="popup-message-text">[text]</div>
+            <div class="d-flex flex-column align-items-end mt-5 mb-3 flex-shrink-0" id="popup-message-controls">
+                [controls]</div>
+        </div>
+    </div>
+
+    <!-- popup-input -->
+    <div class="popup" id="popup-input">
+        <div class="popup-backdrop" onclick="popup();"></div>
+        <form class="popup-window px-5" style="max-height: unset;"
+            onsubmit="event.preventDefault(); popupInputCallback($('#popup-input-input').val());">
+            <div class="fs-20 fw-600 text-dark flex-shrink-0" id="popup-input-label">[label]</div>
+            <div class="text-dark mt-3 overflow-auto">
+                <input class="form-control m-input mt-3" value="" placeholder="" id="popup-input-input" type="text">
+            </div>
+            <div class="d-flex flex-column align-items-end my-4 overflow-auto flex-shrink-0">
+                <button class="btn btn-danger  px-5" id="popup-input-button" type="submit">Done</button>
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+
+
+    <!-- activity-settings -->
+    <div class="activity" id="activity-settings">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Settings</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <button class="menu-item" onclick="activity('activity-my-account');">
+                <div class="menu-item-icon">account_circle</div>
+                <div class="menu-item-label">My Account</div>
+            </button>
+            <button class="menu-item" onclick="activity('activity-subscriptions')">
+                <div class="menu-item-icon">subscriptions</div>
+                <div class="menu-item-label">Subscriptions</div>
+            </button>
+            <button class="menu-item" onclick="activity('activity-app-lock-create-pin');">
+                <div class="menu-item-icon">lock</div>
+                <div class="menu-item-label">App Lock</div>
+            </button>
+            <button class="menu-item" onclick="profileSignout()">
+                <div class="menu-item-icon">logout</div>
+                <div class="menu-item-label">Sign Out</div>
+            </button>
+            <button class="menu-item" onclick="activity('activity-settings-help')">
+                <div class="menu-item-icon">support</div>
+                <div class="menu-item-label">Help & Support</div>
+            </button>
+            <button class="menu-item" onclick="activity('activity-settings-about')">
+                <div class="menu-item-icon">info</div>
+                <div class="menu-item-label">About</div>
+            </button>
+            <button class="menu-item" onclick="activity('activity-hidden-settings')">
+                <div class="menu-item-icon">terminal</div>
+                <div class="menu-item-label">Developer Settings</div>
+            </button>
+            <button class="menu-item" onclick="toggleTheme();">
+                <div class="menu-item-icon">dark_mode</div>
+                <div class="menu-item-label">Dark Mode</div>
+                <div class="menu-item-icon" style="font-size: 32px;" id="activity-settings-dark-theme-toggle">toggle_off
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- activity-hidden-settings -->
+    <div class="activity" id="activity-hidden-settings">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Settings</div>
+            </div>
+        </div>
+        <div class="activity-body">
+            <button class="menu-item" onclick="localStorage.clear();">
+                <div class="menu-item-icon">settings</div>
+                <div class="menu-item-label">Clear Local Storage</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- activity-settings-about -->
+    <div class="activity" id="activity-settings-about">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>About</div>
+            </div>
+            <!-- <button class="app-bar-control" onclick="">more_horiz</button> -->
+        </div>
+        <div class="activity-body">
+            <div class="px-5">
+                <!-- <div class="fw-600 fs-24">About Us</div> -->
+                <div class="mt-4">
+                    <div class="fw-900 nunito text-danger fs-14">XCHAT</div>
+                    <div class="p-1"></div>
+                    <div class="fs-11 text-secondary">&copy; All rights are reserved.</div>
+                    <div class="text-secondary fs-11">Version: 1.0.0</div>
+                </div>
+                <div class="mt-4">
+                    <div class="fw-600 fs-12 mb-1">Developed by</div>
+                    <div class="fs-12 fw-500 text-secondary">
+                        <div>Munish Kumar & Sonia</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 pt-4 fs-12">
+                <div class="fw-600 fs-16 mb-4">Disclaimer</div>
+                <p>The project XCHAT is a digital platform which can be used to communicate with friends, team members
+                    or co-workers. This application can be used as a communication platform in organizations or
+                    businesses to establish an internal communication network with their peers.</p>
+                <p>Instead of using any social media platforms (like WhatsApp Groups or Telegram Groups) for
+                    communication. Companies, and other organisations (like schools, colleges, and businesses) can use
+                    this application, which can serve as a dedicated communication platform for professional use.</p>
+                <p>The XCHAT is simple, easy, and private.</p>
+                <p>In simple words, the XCHAT is an instant messaging platform which is inspired by the features of
+                    other social media platforms like WhatsApp (mostly), Instagram, Snapchat, and Telegram too.</p>
+                <p>The XCHAT is intended to improve the simplicity and privacy of the communication and deduct
+                    distractions out of the chatting experience. User can keep his/her personal profile or social media
+                    separate and use the XHCAT for professional communication.</p>
+                <p>You don't even have to share your phone number. The XCHAT works with your email address, and you must
+                    create a username which is unique for every user. Email address allows us to work globally, and you
+                    don't have to switch accounts if you move to other country (as in case of WhatsApp you must switch
+                    to another account as you change your phone number after moving to another country).</p>
+                <p>The XCHAT is platform and phone number independent.</p>
+                <p>The term XCHAT is pronounced as "cross chat" or "ex chat".</p>
+                <p>The "cross" or "ex" stands for the system platform independence or the application. The XCHAT is a
+                    Progressive Web Application. Being a web application, it can be used on Android devices, Windows NT
+                    platform, Apple's Mac system and iOS system too.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-settings-help -->
+    <div class="activity" id="activity-settings-help">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Help & Support</div>
+            </div>
+            <!-- <button class="app-bar-control" onclick="">more_horiz</button> -->
+        </div>
+        <div class="activity-body">
+            <div class="p-1"></div>
+            <button class="menu-item"
+                onclick="window.open('mailto:send2munish@gmail.com?subject=XCHAT Support', '_self');">
+                <div class="menu-item-icon">email</div>
+                <div class="menu-item-label flex-column align-items-start">
+                    <div>Email Support</div>
+                    <div class="fs-12 text-muted">send2munish@gmail.com</div>
+                </div>
+            </button>
+            <button class="menu-item" onclick="window.open('tel:+917814625194', '_self');">
+                <div class="menu-item-icon">phone</div>
+                <div class="menu-item-label flex-column align-items-start">
+                    <div>Call Support</div>
+                    <div class="fs-12 text-muted">+91 7814625194</div>
+                </div>
+            </button>
+            <button class="menu-item" onclick="window.open('https:\/\/munish.ml\/support\/', '_blank');">
+                <div class="menu-item-icon">language</div>
+                <div class="menu-item-label flex-column align-items-start">
+                    <div>Visit website</div>
+                    <div class="fs-12 text-muted">munish.ml/support</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- activity-settings-subscriptions -->
+    <div class="activity" id="activity-subscriptions">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Get Subscription</div>
+            </div>
+        </div>
+
+        <div class="activity-body">
+            <div class="px-5 py-3 fw-600">Your Subscriptions</div>
+            <div class="row" id="activity-subscriptions-subscriptions-wrapper"></div>
+
+            <div id="activity-subscriptions-buy-subscription-wrapper">
+                <div class="row">
+                    <div class="px-5 py-3 fw-600">Get Subscriptions</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-4" id="trial-expired-card">
+                        <div class="text-light m-4 my-2 p-4 py-4 shadow click-scale-animation"
+                            style="border-radius: 10px; background: #ED213A; background: -webkit-linear-gradient(to right, #93291E, #ED213A); background: linear-gradient(to right, #93291E, #ED213A);">
+                            <div class="d-flex justify-content-center fs-12">
+                                <div class="text-center">Your trial has been expired</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4" id="get-trial-card">
+                        <div class="text-light m-4 my-2 p-4 py-4 shadow click-scale-animation"
+                            style="border-radius: 10px; background: #ED213A; background: -webkit-linear-gradient(to right, #93291E, #ED213A); background: linear-gradient(to right, #93291E, #ED213A);">
+                            <div class="d-flex">
+                                <div>Premium Trial</div>
+                                <div class="flex-grow-1"></div>
+                                <div class="d-flex flex-column align-items-end">
+                                    <div class="fs-20 fw-600">FREE</div>
+                                    <div class="fs-10">For 7 Days</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4 fs-12">
+                                <div class="text-center">Get all the features unlocked just for you for a trial period
+                                    of 7 days.</div>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <button class="btn btn-light my-2 px-5" style="border-radius: 20px;"
+                                    onclick="enablePremiumTrial();">Get Now</button>
+                                <div class="fs-8" style="color: #e0e0e0;">Terms and conditions apply</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="text-light m-4 my-2 p-4 py-4 shadow click-scale-animation"
+                            style="border-radius: 10px; background: #536976; background: -webkit-linear-gradient(to right, #292E49, #536976); background: linear-gradient(to right, #292E49, #536976);">
+                            <div class="d-flex">
+                                <div>Premium</div>
+                                <div class="flex-grow-1"></div>
+                                <div class="d-flex flex-column align-items-end">
+                                    <div class="fs-20 fw-600">Rs. 100</div>
+                                    <div class="fs-10">For 1 Month</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4 fs-12">
+                                <div class="text-center">Get this mini subscription for 1 month</div>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <button class="btn btn-light my-2 px-5" style="border-radius: 20px;"
+                                    onclick="purchaseSubscription(10000,28, 'premium-1');">Get Now</button>
+                                <div class="fs-8" style="color: #e0e0e0;">Terms and conditions apply</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="text-light m-4 my-2 p-4 py-4 shadow click-scale-animation"
+                            style="border-radius: 10px; background: #536976; background: -webkit-linear-gradient(to right, #292E49, #536976); background: linear-gradient(to right, #292E49, #536976);">
+                            <div class="d-flex">
+                                <div>Premium</div>
+                                <div class="flex-grow-1"></div>
+                                <div class="d-flex flex-column align-items-end">
+                                    <div class="fs-20 fw-600">Rs. 250</div>
+                                    <div class="fs-10">For 3 Month</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4 fs-12">
+                                <div class="text-center">
+                                    Get this mini subscription for 1 month
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <button class="btn btn-light my-2 px-5" style="border-radius: 20px;"
+                                    onclick="purchaseSubscription(25000, 84, 'premium-2');">Get Now</button>
+                                <div class="fs-8" style="color: #e0e0e0;">Terms and conditions apply</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="text-light m-4 my-2 p-4 py-4 shadow click-scale-animation"
+                            style="border-radius: 10px; background: #536976; background: -webkit-linear-gradient(to right, #292E49, #536976); background: linear-gradient(to right, #292E49, #536976);">
+                            <div class="d-flex">
+                                <div>Premium</div>
+                                <div class="flex-grow-1"></div>
+                                <div class="d-flex flex-column align-items-end">
+                                    <div class="fs-20 fw-600">Rs. 400</div>
+                                    <div class="fs-10">For 6 Month</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4 fs-12">
+                                <div class="text-center">
+                                    Get this mini subscription for 1 month
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <button class="btn btn-light my-2 px-5" style="border-radius: 20px;"
+                                    onclick="purchaseSubscription(40000, 168, 'premium-3');">Get Now</button>
+                                <div class="fs-8" style="color: #e0e0e0;">Terms and conditions apply</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- activity-lock-screen -->
+    <div class="activity" id="activity-lock-screen">
+        <div class="activity-body">
+            <div class="d-flex flex-column align-items-center p-5">
+                <div class="fs-14 fw-900 nunito text-danger">XCHAT</div>
+                <div class="fw-600 fs-24 mt-5">Hi, there</div>
+                <div class="pb-5 FS-16 fw-600 text-center pt-4">
+                    Please enter the PIN to unlock your account.
+                </div>
+                <form class="d-flex flex-column" onsubmit="verifyAppLockPin(event);">
+                    <input type="password" class="form-control m-input text-center" autocomplete="off"
+                        style="letter-spacing: 10px; font-size: 20px; width: 150px;" placeholder="****"
+                        id="appLockPINInput" maxlength="4" onkeyup="$(this).removeClass('is-invalid');">
+                    <div class="invalid-feedback text-center fw-500">Invalid PIN, Try again</div>
+                    <button class="btn btn-danger btn-sm mt-4">Unlock</button>
+                </form>
+            </div>
+            <div class="d-flex flex-column align-items-center justify-content-center p-5">
+                <button class="btn btn-sm px-4 btn-outline-secondary" onclick="profileSignout();">Sign out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-app-lock-create-pin -->
+    <div class="activity" id="activity-app-lock-create-pin">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-column align-items-center p-5">
+                <!-- <div class="fs-14 fw-900 nunito text-danger">XCHAT</div> -->
+                <div class="fw-600 fs-24 mt-5">App Lock</div>
+                <div class="pb-5 FS-16 fw-600 text-center pt-4">
+                    Create or Update PIN
+                </div>
+                <form class="d-flex flex-column" onsubmit="confirmAppLockPin(event);">
+                    <input type="password" class="form-control m-input text-center" autocomplete="off"
+                        style="letter-spacing: 10px; font-size: 20px; width: 150px;" placeholder="****"
+                        id="appLockPINSetInput0" maxlength="4" onkeyup="$(this).removeClass('is-invalid');">
+                    <div class="invalid-feedback text-center fw-500">Invalid PIN, Try again</div>
+                    <button class="btn btn-danger btn-sm mt-4" type="submit">Next</button>
+                </form>
+            </div>
+            <div class="d-flex flex-column align-items-center justify-content-center p-5">
+                <button class="btn btn-sm px-4 btn-outline-secondary" onclick="disableAppLock();">Disable Lock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-app-lock-create-pin-confirm -->
+    <div class="activity" id="activity-app-lock-create-pin-confirm">
+        <div class="activity-body">
+            <div class="d-flex flex-column align-items-center p-5">
+                <div class="pb-5 FS-16 fw-600 text-center pt-4">
+                    Confirm PIN
+                </div>
+                <form class="d-flex flex-column" onsubmit="setAppLockPin(event);">
+                    <input type="password" class="form-control m-input text-center" autocomplete="off"
+                        style="letter-spacing: 10px; font-size: 20px; width: 150px;" placeholder="****"
+                        id="appLockPINSetInput1" maxlength="4" onkeyup="$(this).removeClass('is-invalid');">
+                    <div class="invalid-feedback text-center fw-500">PIN does not match</div>
+                    <button class="btn btn-danger btn-sm mt-4" type="submit">Finish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <!-- activity-fallback -->
+    <div class="activity" id="activity-fallback">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+        </div>
+        <div class="activity-body">
+            <div class="dead-center text-center p-5">
+                <img src="res/media/theme-light/empty-box.png" id="image_0001" style="width: 200px;">
+                <div class="fw-600 fs-16 mb-3">Woah! you got an error</div>
+                <div class="fs-12" style="color: #a0a0a0;">You've landed on a view, that does not exist.</div>
+                <div class="p-5"></div>
+                <div class="p-5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-loading -->
+    <div class="activity-static" style="z-index: 999;" id="activity-loading">
+        <div class="loading-backdrop"></div>
+        <div class="dead-center">
+            <div class="spinner-border text-light"></div>
+        </div>
+    </div>
+
+    <!-- activity-getting-started -->
+    <div class="activity" id="activity-getting-started">
+        <div class="activity-body">
+            <div class="flex-grow-1 p-5 d-flex flex-column justify-content-center">
+                <div class="text-danger nunito fw-900 fs-16 mb-3">XCHAT</div>
+                <div class="h2 mb-4 text-dark">Get Started</div>
+                <div class="fs-11 text-muted">
+                    By clicking next you agree to our <a onclick="activity('activity-terms-of-service');"
+                        class="text-muted link-hover-animation">Terms of Service</a> and <a
+                        class="text-muted link-hover-animation" onclick="activity('activity-privacy-policy');">Privacy
+                        Policy</a>
+                </div>
+            </div>
+            <div class="d-flex px-5 pb-5 justify-content-end">
+                <div class="material-icons d-flex rounded-circle text-light bg-danger justify-content-center align-items-center shadow-sm border grow-animation"
+                    style="width: 60px; height: 60px;" onclick="activity('activity-signin')">
+                    arrow_forward_ios
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-privacy-policy -->
+    <div class="activity" id="activity-privacy-policy">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Privacy Policy</div>
+            </div>
+        </div>
+        <div class="activity-body p-4">
+            <p>1. <b>Introduction</b></p>
+            <p>Welcome to <b> XCHAT</b>.</p>
+            <p>Our Privacy Policy governs your visit to <i>https://munish.ml/xchat/</i>, and explains how we collect,
+                safeguard and disclose information that results from your use of our Service.</p>
+            <p>We use your data to provide and improve Service. By using Service, you agree to the collection and use of
+                information in accordance with this policy. Unless otherwise defined in this Privacy Policy, the terms
+                used in this Privacy Policy have the same meanings as in our Terms and Conditions.</p>
+            <p>Our Terms and Conditions (<b>“Terms”</b>) govern all use of our Service and together with the Privacy
+                Policy constitutes your agreement with us (<b>“agreement”</b>).</p>
+            <p>2. <b>Definitions</b></p>
+            <p><b>SERVICE</b> means the https://munish.ml/xchat/ website operated by XCHAT.</p>
+            <p><b>PERSONAL DATA</b> means data about a living individual who can be identified from those data (or from
+                those and other information either in our possession or likely to come into our possession).</p>
+            <p><b>USAGE DATA</b> is data collected automatically either generated by the use of Service or from Service
+                infrastructure itself (for example, the duration of a page visit).</p>
+            <p><b>COOKIES</b> are small files stored on your device (computer or mobile device).</p>
+            <p><b>DATA CONTROLLER</b> means a natural or legal person who (either alone or jointly or in common with
+                other persons) determines the purposes for which and the manner in which any personal data are, or are
+                to be, processed. For the purpose of this Privacy Policy, we are a Data Controller of your data.</p>
+            <p><b>DATA PROCESSORS (OR SERVICE PROVIDERS)</b> means any natural or legal person who processes the data on
+                behalf of the Data Controller. We may use the services of various Service Providers in order to process
+                your data more effectively.</p>
+            <p><b>DATA SUBJECT</b> is any living individual who is the subject of Personal Data.</p>
+            <p><b>THE USER</b> is the individual using our Service. The User corresponds to the Data Subject, who is the
+                subject of Personal Data.</p>
+            <p>3. <b>Information Collection and Use</b></p>
+            <p>We collect several different types of information for various purposes to provide and improve our Service
+                to you.</p>
+            <p>4. <b>Types of Data Collected</b></p>
+            <p><b>Personal Data</b></p>
+            <p>While using our Service, we may ask you to provide us with certain personally identifiable information
+                that can be used to contact or identify you (<b>“Personal Data”</b>). Personally identifiable
+                information may include, but is not limited to:</p>
+            <p>0.1. Email address</p>
+            <p>0.2. First name and last name</p>
+            <p>0.3. Phone number</p>
+            <p>0.4. Address, Country, State, Province, ZIP/Postal code, City</p>
+            <p>0.5. Cookies and Usage Data</p>
+            <p>We may use your Personal Data to contact you with newsletters, marketing or promotional materials and
+                other information that may be of interest to you. You may opt out of receiving any, or all, of these
+                communications from us by following the unsubscribe link.</p>
+            <p><b>Usage Data</b></p>
+            <p>We may also collect information that your browser sends whenever you visit our Service or when you access
+                Service by or through any device (<b>“Usage Data”</b>).</p>
+            <p>This Usage Data may include information such as your computer's Internet Protocol address (e.g. IP
+                address), browser type, browser version, the pages of our Service that you visit, the time and date of
+                your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
+            <p>When you access Service with a device, this Usage Data may include information such as the type of device
+                you use, your device unique ID, the IP address of your device, your device operating system, the type of
+                Internet browser you use, unique device identifiers and other diagnostic data.</p>
+
+            <p><b>Tracking Cookies Data</b></p>
+            <p>We use cookies and similar tracking technologies to track the activity on our Service and we hold certain
+                information.</p>
+            <p>Cookies are files with a small amount of data which may include an anonymous unique identifier. Cookies
+                are sent to your browser from a website and stored on your device. Other tracking technologies are also
+                used such as beacons, tags and scripts to collect and track information and to improve and analyze our
+                Service.</p>
+            <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However,
+                if you do not accept cookies, you may not be able to use some portions of our Service.</p>
+            <p>Examples of Cookies we use:</p>
+            <p>0.1. <b>Session Cookies:</b> We use Session Cookies to operate our Service.</p>
+            <p>0.2. <b>Preference Cookies:</b> We use Preference Cookies to remember your preferences and various
+                settings.</p>
+            <p>0.3. <b>Security Cookies:</b> We use Security Cookies for security purposes.</p>
+            <p>0.4. <b>Advertising Cookies:</b> Advertising Cookies are used to serve you with advertisements that may
+                be relevant to you and your interests.</p>
+            <p><b>Other Data</b></p>
+            <p>While using our Service, we may also collect the following information: sex, age, date of birth, place of
+                birth, passport details, citizenship, registration at place of residence and actual address, telephone
+                number (work, mobile), details of documents on education, qualification, professional training,
+                employment agreements, <a href="#">NDA agreements</a>,
+                information on bonuses and compensation, information on marital status, family members, social security
+                (or other taxpayer identification) number, office location and other data.</p>
+            <p>5. <b>Use of Data</b></p>
+            <p>XCHAT uses the collected data for various purposes:</p>
+            <p>0.1. to provide and maintain our Service;</p>
+            <p>0.2. to notify you about changes to our Service;</p>
+            <p>0.3. to allow you to participate in interactive features of our Service when you choose to do so;</p>
+            <p>0.4. to provide customer support;</p>
+            <p>0.5. to gather analysis or valuable information so that we can improve our Service;</p>
+            <p>0.6. to monitor the usage of our Service;</p>
+            <p>0.7. to detect, prevent and address technical issues;</p>
+            <p>0.8. to fulfil any other purpose for which you provide it;</p>
+            <p>0.9. to carry out our obligations and enforce our rights arising from any contracts entered into between
+                you and us, including for billing and collection;</p>
+            <p>0.10. to provide you with notices about your account and/or subscription, including expiration and
+                renewal notices, email-instructions, etc.;</p>
+            <p>0.11. to provide you with news, special offers and general information about other goods, services and
+                events which we offer that are similar to those that you have already purchased or enquired about unless
+                you have opted not to receive such information;</p>
+            <p>0.12. in any other way we may describe when you provide the information;</p>
+            <p>0.13. for any other purpose with your consent.</p>
+            <p>6. <b>Retention of Data</b></p>
+            <p>We will retain your Personal Data only for as long as is necessary for the purposes set out in this
+                Privacy Policy. We will retain and use your Personal Data to the extent necessary to comply with our
+                legal obligations (for example, if we are required to retain your data to comply with applicable laws),
+                resolve disputes, and enforce our legal agreements and policies.</p>
+            <p>We will also retain Usage Data for internal analysis purposes. Usage Data is generally retained for a
+                shorter period, except when this data is used to strengthen the security or to improve the functionality
+                of our Service, or we are legally obligated to retain this data for longer time periods.</p>
+            <p>7. <b>Transfer of Data</b></p>
+            <p>Your information, including Personal Data, may be transferred to - and maintained on - computers located
+                outside of your state, province, country or other governmental jurisdiction where the data protection
+                laws may differ from those of your jurisdiction.</p>
+            <p>If you are located outside India and choose to provide information to us, please note that we transfer
+                the data, including Personal Data, to India and process it there.</p>
+            <p>Your consent to this Privacy Policy followed by your submission of such information represents your
+                agreement to that transfer.</p>
+            <p>XCHAT will take all the steps reasonably necessary to ensure that your data is treated securely and in
+                accordance with this Privacy Policy and no transfer of your Personal Data will take place to an
+                organisation or a country unless there are adequate controls in place including the security of your
+                data and other personal information.</p>
+            <p>8. <b>Disclosure of Data</b></p>
+            <p>We may disclose personal information that we collect, or you provide:</p>
+            <p>0.1. <b>Disclosure for Law Enforcement.</b></p>
+            <p>Under certain circumstances, we may be required to disclose your Personal Data if required to do so by
+                law or in response to valid requests by public authorities.</p>
+            <p>0.2. <b>Business Transaction.</b></p>
+            <p>If we or our subsidiaries are involved in a merger, acquisition or asset sale, your Personal Data may be
+                transferred.</p>
+            <p>0.3. <b>Other cases. We may disclose your information also:</b></p>
+            <p>0.3.1. to our subsidiaries and affiliates;</p>
+            <p>0.3.2. to contractors, service providers, and other third parties we use to support our business;</p>
+            <p>0.3.3. to fulfill the purpose for which you provide it;</p>
+            <p>0.3.4. for the purpose of including your company's logo on our website;</p>
+            <p>0.3.5. for any other purpose disclosed by us when you provide the information;</p>
+            <p>0.3.6. with your consent in any other cases;</p>
+            <p>0.3.7. if we believe disclosure is necessary or appropriate to protect the rights, property, or safety of
+                the Company, our customers, or others.</p>
+            <p>9. <b>Security of Data</b></p>
+            <p>The security of your data is important to us but remember that no method of transmission over the
+                Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable
+                means to protect your Personal Data, we cannot guarantee its absolute security.</p>
+            <p>10. <b>Your Data Protection Rights Under General Data Protection Regulation (GDPR)
+                </b></p>
+            <p>If you are a resident of the European Union (EU) and European Economic Area (EEA), you have certain data
+                protection rights, covered by GDPR.</p>
+            <p>We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal
+                Data.</p>
+            <p> If you wish to be informed what Personal Data we hold about you and if you want it to be removed from
+                our systems, please email us at <b>send2munish@gmail.com</b>.</p>
+            <p>In certain circumstances, you have the following data protection rights:</p>
+            <p>0.1. the right to access, update or to delete the information we have on you;</p>
+            <p>0.2. the right of rectification. You have the right to have your information rectified if that
+                information is inaccurate or incomplete;</p>
+            <p>0.3. the right to object. You have the right to object to our processing of your Personal Data;</p>
+            <p>0.4. the right of restriction. You have the right to request that we restrict the processing of your
+                personal information;</p>
+            <p>0.5. the right to data portability. You have the right to be provided with a copy of your Personal Data
+                in a structured, machine-readable and commonly used format;</p>
+            <p>0.6. the right to withdraw consent. You also have the right to withdraw your consent at any time where we
+                rely on your consent to process your personal information;</p>
+            <p>Please note that we may ask you to verify your identity before responding to such requests. Please note,
+                we may not able to provide Service without some necessary data.</p>
+            <p>You have the right to complain to a Data Protection Authority about our collection and use of your
+                Personal Data. For more information, please contact your local data protection authority in the European
+                Economic Area (EEA).</p>
+            <p>11. <b>Your Data Protection Rights under the California Privacy Protection Act (CalOPPA)</b></p>
+            <p>CalOPPA is the first state law in the nation to require commercial websites and online services to post a
+                privacy policy. The law's reach stretches well beyond California to require a person or company in the
+                United States (and conceivable the world) that operates websites collecting personally identifiable
+                information from California consumers to post a conspicuous privacy policy on its website stating
+                exactly the information being collected and those individuals with whom it is being shared, and to
+                comply with this policy.</p>
+            <p>According to CalOPPA we agree to the following:</p>
+            <p>0.1. users can visit our site anonymously;</p>
+            <p>0.2. our Privacy Policy link includes the word “Privacy”, and can easily be found on the home page of our
+                website;</p>
+            <p>0.3. users will be notified of any privacy policy changes on our Privacy Policy Page;</p>
+            <p>0.4. users are able to change their personal information by emailing us at <b>send2munish@gmail.com</b>.
+            </p>
+            <p>Our Policy on “Do Not Track” Signals:</p>
+            <p>We honor Do Not Track signals and do not track, plant cookies, or use advertising when a Do Not Track
+                browser mechanism is in place. Do Not Track is a preference you can set in your web browser to inform
+                websites that you do not want to be tracked.</p>
+            <p>You can enable or disable Do Not Track by visiting the Preferences or Settings page of your web browser.
+            </p>
+            <p>12. <b>Your Data Protection Rights under the California Consumer Privacy Act (CCPA)</b></p>
+            <p>If you are a California resident, you are entitled to learn what data we collect about you, ask to delete
+                your data and not to sell (share) it. To exercise your data protection rights, you can make certain
+                requests and ask us:</p>
+            <p><b>0.1. What personal information we have about you. If you make this request, we will return to you:</b>
+            </p>
+            <p>0.0.1. The categories of personal information we have collected about you.</p>
+            <p>0.0.2. The categories of sources from which we collect your personal information.</p>
+            <p>0.0.3. The business or commercial purpose for collecting or selling your personal information.</p>
+            <p>0.0.4. The categories of third parties with whom we share personal information.</p>
+            <p>0.0.5. The specific pieces of personal information we have collected about you.</p>
+            <p>0.0.6. A list of categories of personal information that we have sold, along with the category of any
+                other company we sold it to. If we have not sold your personal information, we will inform you of that
+                fact.</p>
+            <p>0.0.7. A list of categories of personal information that we have disclosed for a business purpose, along
+                with the category of any other company we shared it with.</p>
+            <p>Please note, you are entitled to ask us to provide you with this information up to two times in a rolling
+                twelve-month period. When you make this request, the information provided may be limited to the personal
+                information we collected about you in the previous 12 months.</p>
+            <p><b>0.2. To delete your personal information. If you make this request, we will delete the personal
+                    information we hold about you as of the date of your request from our records and direct any service
+                    providers to do the same. In some cases, deletion may be accomplished through de-identification of
+                    the information. If you choose to delete your personal information, you may not be able to use
+                    certain functions that require your personal information to operate.</b></p>
+            <p><b>0.3. To stop selling your personal information. We don't sell or rent your personal information to any
+                    third parties for any purpose. We do not sell your personal information for monetary consideration.
+                    However, under some circumstances, a transfer of personal information to a third party, or within
+                    our family of companies, without monetary consideration may be considered a “sale” under California
+                    law. You are the only owner of your Personal Data and can request disclosure or deletion at any
+                    time.</b></p>
+            <p>If you submit a request to stop selling your personal information, we will stop making such transfers.
+            </p>
+            <p>Please note, if you ask us to delete or stop selling your data, it may impact your experience with us,
+                and you may not be able to participate in certain programs or membership services which require the
+                usage of your personal information to function. But in no circumstances, we will discriminate against
+                you for exercising your rights.</p>
+            <p>To exercise your California data protection rights described above, please send your request(s) by email:
+                <b>send2munish@gmail.com</b>.
+            </p>
+            <p>Your data protection rights, described above, are covered by the CCPA, short for the California Consumer
+                Privacy Act. To find out more, visit the official California Legislative Information website. The CCPA
+                took effect on 01/01/2020.</p>
+            <p>13. <b>Service Providers</b></p>
+            <p>We may employ third party companies and individuals to facilitate our Service (<b>“Service
+                    Providers”</b>), provide Service on our behalf, perform Service-related services or assist us in
+                analysing how our Service is used.</p>
+            <p>These third parties have access to your Personal Data only to perform these tasks on our behalf and are
+                obligated not to disclose or use it for any other purpose.</p>
+            <p>14. <b>Analytics</b></p>
+            <p>We may use third-party Service Providers to monitor and analyze the use of our Service.</p>
+            <p>15. <b>CI/CD tools</b></p>
+            <p>We may use third-party Service Providers to automate the development process of our Service.</p>
+
+            <p>16. <b>Behavioral Remarketing</b></p>
+            <p>We may use remarketing services to advertise on third party websites to you after you visited our
+                Service. We and our third-party vendors use cookies to inform, optimise and serve ads based on your past
+                visits to our Service.</p>
+            <p>17. <b>Payments</b></p>
+            <p>We may provide paid products and/or services within Service. In that case, we use third-party services
+                for payment processing (e.g. payment processors).</p>
+            <p>We will not store or collect your payment card details. That information is provided directly to our
+                third-party payment processors whose use of your personal information is governed by their Privacy
+                Policy. These payment processors adhere to the standards set by PCI-DSS as managed by the PCI Security
+                Standards Council, which is a joint effort of brands like Visa, Mastercard, American Express and
+                Discover. PCI-DSS requirements help ensure the secure handling of payment information.</p>
+            <p>18. <b>Links to Other Sites</b></p>
+            <p>Our Service may contain links to other sites that are not operated by us. If you click a third party
+                link, you will be directed to that third party's site. We strongly advise you to review the Privacy
+                Policy of every site you visit.</p>
+            <p>We have no control over and assume no responsibility for the content, privacy policies or practices of
+                any third party sites or services.</p>
+            <p>19. <b><b>Children's Privacy</b></b></p>
+            <p>Our Services are not intended for use by children under the age of 18 (<b>“Child”</b> or
+                <b>“Children”</b>).
+            </p>
+            <p>We do not knowingly collect personally identifiable information from Children under 18. If you become
+                aware that a Child has provided us with Personal Data, please contact us. If we become aware that we
+                have collected Personal Data from Children without verification of parental consent, we take steps to
+                remove that information from our servers.</p>
+            <p>20. <b>Changes to This Privacy Policy</b></p>
+            <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new
+                Privacy Policy on this page.</p>
+            <p>We will let you know via email and/or a prominent notice on our Service, prior to the change becoming
+                effective and update “effective date” at the top of this Privacy Policy.</p>
+            <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy
+                Policy are effective when they are posted on this page.</p>
+            <p>21. <b>Contact Us</b></p>
+            <p>If you have any questions about this Privacy Policy, please contact us by email:
+                <b>send2munish@gmail.com</b>.
+            </p>
+        </div>
+    </div>
+
+    <!-- activity-terms-of-service -->
+    <div class="activity" id="activity-terms-of-service">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <div>Terms of Service</div>
+            </div>
+        </div>
+        <div class="activity-body p-4">
+            <h2><strong>Terms and Conditions</strong></h2>
+
+            <p>Welcome to XCHAT!</p>
+
+            <p>These terms and conditions outline the rules and regulations for the use of XCHAT's Website, located at
+                https://munish.ml/xchat/.</p>
+
+            <p>By accessing this website we assume you accept these terms and conditions. Do not continue to use XCHAT
+                if you do not agree to take all of the terms and conditions stated on this page.</p>
+
+            <p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice
+                and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and
+                compliant to the Company's terms and conditions. "The Company", "Ourselves", "We", "Our" and "Us",
+                refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. All terms
+                refer to the offer, acceptance and consideration of payment necessary to undertake the process of our
+                assistance to the Client in the most appropriate manner for the express purpose of meeting the Client's
+                needs in respect of provision of the Company's stated services, in accordance with and subject to,
+                prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural,
+                capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.
+            </p>
+
+            <h3><strong>Cookies</strong></h3>
+
+            <p>We employ the use of cookies. By accessing XCHAT, you agreed to use cookies in agreement with the XCHAT's
+                Privacy Policy. </p>
+
+            <p>Most interactive websites use cookies to let us retrieve the user's details for each visit. Cookies are
+                used by our website to enable the functionality of certain areas to make it easier for people visiting
+                our website. Some of our affiliate/advertising partners may also use cookies.</p>
+
+            <h3><strong>License</strong></h3>
+
+            <p>Unless otherwise stated, XCHAT and/or its licensors own the intellectual property rights for all material
+                on XCHAT. All intellectual property rights are reserved. You may access this from XCHAT for your own
+                personal use subjected to restrictions set in these terms and conditions.</p>
+
+            <p>You must not:</p>
+            <ul>
+                <li>Republish material from XCHAT</li>
+                <li>Sell, rent or sub-license material from XCHAT</li>
+                <li>Reproduce, duplicate or copy material from XCHAT</li>
+                <li>Redistribute content from XCHAT</li>
+            </ul>
+
+
+            <p>Parts of this website offer an opportunity for users to post and exchange opinions and information in
+                certain areas of the website. XCHAT does not filter, edit, publish or review Comments prior to their
+                presence on the website. Comments do not reflect the views and opinions of XCHAT,its agents and/or
+                affiliates. Comments reflect the views and opinions of the person who post their views and opinions. To
+                the extent permitted by applicable laws, XCHAT shall not be liable for the Comments or for any
+                liability, damages or expenses caused and/or suffered as a result of any use of and/or posting of and/or
+                appearance of the Comments on this website.</p>
+
+            <p>XCHAT reserves the right to monitor all Comments and to remove any Comments which can be considered
+                inappropriate, offensive or causes breach of these Terms and Conditions.</p>
+
+            <p>You warrant and represent that:</p>
+
+            <ul>
+                <li>You are entitled to post the Comments on our website and have all necessary licenses and consents to
+                    do so;</li>
+                <li>The Comments do not invade any intellectual property right, including without limitation copyright,
+                    patent or trademark of any third party;</li>
+                <li>The Comments do not contain any defamatory, libelous, offensive, indecent or otherwise unlawful
+                    material which is an invasion of privacy</li>
+                <li>The Comments will not be used to solicit or promote business or custom or present commercial
+                    activities or unlawful activity.</li>
+            </ul>
+
+            <p>You hereby grant XCHAT a non-exclusive license to use, reproduce, edit and authorize others to use,
+                reproduce and edit any of your Comments in any and all forms, formats or media.</p>
+
+            <h3><strong>Hyperlinking to our Content</strong></h3>
+
+            <p>The following organizations may link to our Website without prior written approval:</p>
+
+            <ul>
+                <li>Government agencies;</li>
+                <li>Search engines;</li>
+                <li>News organizations;</li>
+                <li>Online directory distributors may link to our Website in the same manner as they hyperlink to the
+                    Websites of other listed businesses; and</li>
+                <li>System wide Accredited Businesses except soliciting non-profit organizations, charity shopping
+                    malls, and charity fundraising groups which may not hyperlink to our Web site.</li>
+            </ul>
+
+            <p>These organizations may link to our home page, to publications or to other Website information so long as
+                the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or
+                approval of the linking party and its products and/or services; and (c) fits within the context of the
+                linking party's site.</p>
+
+            <p>We may consider and approve other link requests from the following types of organizations:</p>
+
+            <ul>
+                <li>commonly-known consumer and/or business information sources;</li>
+                <li>dot.com community sites;</li>
+                <li>associations or other groups representing charities;</li>
+                <li>online directory distributors;</li>
+                <li>internet portals;</li>
+                <li>accounting, law and consulting firms; and</li>
+                <li>educational institutions and trade associations.</li>
+            </ul>
+
+            <p>We will approve link requests from these organizations if we decide that: (a) the link would not make us
+                look unfavorably to ourselves or to our accredited businesses; (b) the organization does not have any
+                negative records with us; (c) the benefit to us from the visibility of the hyperlink compensates the
+                absence of XCHAT; and (d) the link is in the context of general resource information.</p>
+
+            <p>These organizations may link to our home page so long as the link: (a) is not in any way deceptive; (b)
+                does not falsely imply sponsorship, endorsement or approval of the linking party and its products or
+                services; and (c) fits within the context of the linking party's site.</p>
+
+            <p>If you are one of the organizations listed in paragraph 2 above and are interested in linking to our
+                website, you must inform us by sending an e-mail to XCHAT. Please include your name, your organization
+                name, contact information as well as the URL of your site, a list of any URLs from which you intend to
+                link to our Website, and a list of the URLs on our site to which you would like to link. Wait 2-3 weeks
+                for a response.</p>
+
+            <p>Approved organizations may hyperlink to our Website as follows:</p>
+
+            <ul>
+                <li>By use of our corporate name; or</li>
+                <li>By use of the uniform resource locator being linked to; or</li>
+                <li>By use of any other description of our Website being linked to that makes sense within the context
+                    and format of content on the linking party's site.</li>
+            </ul>
+
+            <p>No use of XCHAT's logo or other artwork will be allowed for linking absent a trademark license agreement.
+            </p>
+
+            <h3><strong>iFrames</strong></h3>
+
+            <p>Without prior approval and written permission, you may not create frames around our Webpages that alter
+                in any way the visual presentation or appearance of our Website.</p>
+
+            <h3><strong>Content Liability</strong></h3>
+
+            <p>We shall not be hold responsible for any content that appears on your Website. You agree to protect and
+                defend us against all claims that is rising on your Website. No link(s) should appear on any Website
+                that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or
+                advocates the infringement or other violation of, any third party rights.</p>
+
+            <h3><strong>Your Privacy</strong></h3>
+
+            <p>Please read Privacy Policy</p>
+
+            <h3><strong>Reservation of Rights</strong></h3>
+
+            <p>We reserve the right to request that you remove all links or any particular link to our Website. You
+                approve to immediately remove all links to our Website upon request. We also reserve the right to amen
+                these terms and conditions and it's linking policy at any time. By continuously linking to our Website,
+                you agree to be bound to and follow these linking terms and conditions.</p>
+
+            <h3><strong>Removal of links from our website</strong></h3>
+
+            <p>If you find any link on our Website that is offensive for any reason, you are free to contact and inform
+                us any moment. We will consider requests to remove links but we are not obligated to or so or to respond
+                to you directly.</p>
+
+            <p>We do not ensure that the information on this website is correct, we do not warrant its completeness or
+                accuracy; nor do we promise to ensure that the website remains available or that the material on the
+                website is kept up to date.</p>
+
+            <h3><strong>Disclaimer</strong></h3>
+
+            <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and
+                conditions relating to our website and the use of this website. Nothing in this disclaimer will:</p>
+
+            <ul>
+                <li>limit or exclude our or your liability for death or personal injury;</li>
+                <li>limit or exclude our or your liability for fraud or fraudulent misrepresentation;</li>
+                <li>limit any of our or your liabilities in any way that is not permitted under applicable law; or</li>
+                <li>exclude any of our or your liabilities that may not be excluded under applicable law.</li>
+            </ul>
+
+            <p>The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a)
+                are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer,
+                including liabilities arising in contract, in tort and for breach of statutory duty.</p>
+
+            <p>As long as the website and the information and services on the website are provided free of charge, we
+                will not be liable for any loss or damage of any nature.</p>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <!-- activity-signup-email -->
+    <div class="activity" id="activity-signup-enter-email">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Sign up</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="flex-grow-1 d-flex flex-column align-items-center p-5">
+                <form method="post" class="flex-grow-1 d-flex flex-column w-100" style="max-width: 300px;"
+                    onsubmit="signupSendVerificationCode(event);">
+                    <div class="fw-600 fs-24 mb-5">
+                        Create Your New<br> Account
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-600" for="signup_email_address">Email address</label>
+                        <input id="signup_email_address_input" type="text" value="" class="form-control m-input"
+                            name="profileEmail" onkeyup="signupIsProfileEmailAvailable();">
+                        <small id="signup_email_address_invalid_feedback" class="invalid-feedback"></small>
+                    </div>
+                    <div class="form-group mt-3 d-flex justify-content-end">
+                        <input type="submit" class="btn btn-danger px-5 w-100" id="signup_1_submit_button" value="Next">
+                    </div>
+                    <div class="mt-5">
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <a class="fs-12 text-secondary link-hover-animation" onclick="activityBack()">Already have
+                                an account ?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-signup-verify-email -->
+    <div class="activity" id="activity-signup-verify-email">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Verify</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-grow-1 flex-column align-items-center p-5">
+                <div class="w-100" style="max-width: 300px;">
+                    <div class="fw-600 fs-24 mb-5">
+                        Verify Your Email Address
+                    </div>
+                    <form method="post" class="w-100" onsubmit="signupVerifyVerificationCode(event);">
+                        <div class="mb-3">An OTP has been sent to your email address.</div>
+                        <label for="signup_verification_code_input" class="fw-600 fs-14">Enter OTP</label>
+                        <input id="signup_verification_code_input" class="form-control m-input" type="number"
+                            onkeyup="signupVerifyEmailClearErrors();">
+                        <small id="signup_verification_code_invalid_feedback" class="invalid-feedback"></small>
+                        <input id="signup_2_submit_button" type="submit" value="Verify"
+                            class="btn btn-danger mt-5 w-100">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-signup-username-setup -->
+    <div class="activity" id="activity-signup-username-setup">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Verify</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="p-5 d-flex flex-grow-1 flex-column align-items-center">
+                <div class="w-100" style="max-width: 300px;">
+                    <div class="fw-600 fs-24 mb-5">Setup Your New Account</div>
+                    <form method="post" onsubmit="signupUsernameSetup(event);">
+                        <div class="form-group mb-4">
+                            <label for="signup_username_input" class="form-label fw-600">Create Username</label>
+                            <input type="text" name="username" id="signup_username_input" class="form-control m-input"
+                                onkeyup="signupValidateUsername();">
+                            <small id="signup_username_invalid_feedback" class="invalid-feedback"></small>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="signup_password_input" class="form-label fw-600">New Password</label>
+                            <input type="password" name="password" id="signup_password_input"
+                                class="form-control m-input" onkeyup="signupValidatePassword();">
+                            <small id="signup_password_invalid_feedback" class="invalid-feedback"></small>
+                        </div>
+                        <div class="form-group">
+                            <input id="signup_3_submit_button" type="submit" value="Next" class="btn btn-danger  w-100">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-signup-profile-setup -->
+    <div class="activity" id="activity-signup-profile-setup">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Verify</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-column flex-grow-1 align-items-center p-5">
+                <div class="w-100" style="max-width: 300px;">
+                    <div class="fs-24 fw-600 mb-5">Setup Your Profile</div>
+                    <form method="post" enctype="multipart/form-data" onsubmit="profileSignup(event)">
+                        <div class="form-group mb-4 d-flex flex-column align-items-center justify-content-center">
+                            <label for="signup_profile_picture" class="form-label profile-picture-label">
+                                <div class="profile-picture-placeholder"></div>
+                                <div class="material-icons profile-picture-select-icon">photo_camera</div>
+                            </label>
+                            <input type="file" id="signup_profile_picture" name="profile_picture" class="form-control"
+                                hidden accept="image/*"
+                                onchange="inputImagePreview(event, $('.profile-picture-placeholder'));">
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="signup_name_input" class="form-label fw-600">Your Name</label>
+                            <input type="text" id="signup_name_input" name="profile_name" class="form-control m-input"
+                                onfocus="$(this).removeClass('is-invalid');$('#signup_4_submit_button').removeClass('disabled')">
+                            <small class="invalid-feedback">
+                                Please enter your name.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-danger shadow-sm w-100" id="signup_4_submit_button"
+                                type="submit">Finish</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-signin -->
+    <div class="activity" id="activity-signin">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-column flex-grow-1 align-items-center p-5">
+                <div class="w-100" style="max-width: 300px;">
+                    <form method="post" onsubmit="profileSignin(event);">
+                        <div class="fw-600 fs-26 mb-5">Sign in to your account</div>
+                        <div class="form-group">
+                            <input type="hidden" id="signin_incorrect">
+                            <small class="invalid-feedback mb-3 fw-500">Either username or password is
+                                Incorrect.</small>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-600" for="signin_username_input">Username</label>
+                            <input type="text" class="form-control m-input" name="username" id="signin_username_input"
+                                onfocus="$(this).removeClass('is-invalid'); $('#signin_submit_button').removeClass('disabled');">
+                            <small class="invalid-feedback">Please enter username.</small>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-600" for="signin_password_input">Password</label>
+                            <input type="password" class="form-control m-input" name="password"
+                                id="signin_password_input"
+                                onfocus="$(this).removeClass('is-invalid'); $('#signin_submit_button').removeClass('disabled');">
+                            <small class="invalid-feedback">Please enter password.</small>
+                        </div>
+                        <div class="form-group mb-4">
+                            <button type="submit" id="signin_submit_button" class="btn btn-danger w-100 ">Sign
+                                in</button>
+                        </div>
+                    </form>
+                    <div class="mt-5">
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <a class="mb-2 fs-12 text-secondary link-hover-animation"
+                                onclick="activity('activity-password-reset-enter-email')">Forgot password?</a>
+                            <a class="fs-12 text-secondary link-hover-animation"
+                                onclick="activity('activity-signup-enter-email')">Don't have an account?</a>
+                            <!-- <div class="mb-3 fs-12">Don't have an account?</div> -->
+                            <!-- <div class="btn btn-outline-secondary shadow-sm w-100 px-5" onclick="activity('activity-signup-enter-email');">Create Account</div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-password-reset-enter-email -->
+    <div class="activity" id="activity-password-reset-enter-email">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Sign up</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="flex-grow-1 d-flex flex-column align-items-center p-5">
+                <form method="post" class="flex-grow-1 d-flex flex-column w-100" style="max-width: 300px;"
+                    onsubmit="passwordResetSendVerificationCode(event);">
+                    <div class="fw-600 fs-24 mb-5">
+                        Reset Your Account Password
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-600" for="signup_email_address">Email address</label>
+                        <input id="passwordResetEmailInput" type="text" value="" class="form-control m-input"
+                            name="profileEmail"
+                            onfocus="$(this).removeClass('is-invalid');$('#passwordResetEnterEmailSubmitButton').removeClass('disabled')">
+                        <small id="passwordResetEmailInvalidFeedback" class="invalid-feedback"></small>
+                    </div>
+                    <div class="form-group mt-3 d-flex justify-content-end">
+                        <input type="submit" class="btn btn-danger  px-5 w-100" id="passwordResetEnterEmailSubmitButton"
+                            value="Next">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-password-reset-verify-email -->
+    <div class="activity" id="activity-password-reset-verify-email">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Verify</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="d-flex flex-grow-1 flex-column align-items-center p-5">
+                <div class="w-100" style="max-width: 300px;">
+                    <div class="fw-600 fs-24 mb-5">
+                        Verify Your Email Address
+                    </div>
+                    <form method="post" class="w-100" onsubmit="passwordResetVerifyVerificationCode(event);">
+                        <div class="mb-3">An OTP has been sent to your email address.</div>
+                        <label for="passwordResetVerificationCodeInput" class="fw-600 fs-14">Enter OTP</label>
+                        <input id="passwordResetVerificationCodeInput" class="form-control m-input" type="number"
+                            onkeyup="passwordResetVerifyEmailClearErrors();">
+                        <small id="passwordResetVerificationCodeInvalidFeedback" class="invalid-feedback"></small>
+                        <input id="passwordResetVerifyEmailSubmitButton" type="submit" value="Verify"
+                            class="btn btn-danger mt-5 w-100">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- activity-password-reset-new-password -->
+    <div class="activity" id="activity-password-reset-new-password">
+        <div class="app-bar">
+            <button class="app-bar-control" onclick="activityBack();">arrow_back_ios_new</button>
+            <div class="app-bar-label">
+                <!-- <div>Verify</div> -->
+            </div>
+        </div>
+        <div class="activity-body">
+            <div class="p-5 d-flex flex-grow-1 flex-column align-items-center">
+                <div class="w-100" style="max-width: 300px;">
+                    <div class="fw-600 fs-24 mb-5">Setup Your New Password</div>
+                    <form method="post" onsubmit="passwordResetNewPassword(event);">
+                        <div class="form-group mb-4">
+                            <label for="passwordResetNewPasswordInput" class="form-label fw-600">New Password</label>
+                            <input type="password" name="password" id="passwordResetNewPasswordInput"
+                                class="form-control m-input"
+                                onfocus="$(this).removeClass('is-invalid');$('#passwordResetNewPasswordSubmitButton').removeClass('disabled')">
+                            <small id="passwordResetNewPasswordInvalidFeedback" class="invalid-feedback"></small>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="passwordResetConfirmPasswordInput" class="form-label fw-600">Confirm
+                                Password</label>
+                            <input type="password" name="password" id="passwordResetConfirmPasswordInput"
+                                class="form-control m-input"
+                                onfocus="$(this).removeClass('is-invalid');$('#passwordResetNewPasswordSubmitButton').removeClass('disabled')">
+                            <small id="passwordResetConfirmPasswordInvalidFeedback" class="invalid-feedback"></small>
+                        </div>
+                        <div class="form-group">
+                            <input id="passwordResetNewPasswordSubmitButton" type="submit" value="Next"
+                                class="btn btn-danger  w-100">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <input type="file" id="protected-document-input-profile" hidden
+            onchange="sendProtectedDocument('profile', event)">
+        <input type="file" id="protected-document-input-group" hidden onchange="sendProtectedDocument('group', event)">
+    </div>
+
+</body>
+
+</html>
