@@ -38,10 +38,10 @@ var popupInputCallback = (value) => {
 // let no_messages_bird_house;
 
 const setAssetTheme = () => {
-    empty_box = serverURL + `static/media/${currentTheme}/empty-box.png`;
-    no_messages_purple_bubble = serverURL + `static/media/${currentTheme}/no_messages_purple_bubble.png`;
-    no_messages_bird_house = serverURL + `static/media/${currentTheme}/no-messages-bird-house.png`;
-    no_results_found = serverURL + `static/media/${currentTheme}/no-results-found.png`;
+    empty_box = `res/media/${currentTheme}/empty-box.png`;
+    no_messages_purple_bubble =  `res/media/${currentTheme}/no_messages_purple_bubble.png`;
+    no_messages_bird_house =  `res/media/${currentTheme}/no-messages-bird-house.png`;
+    no_results_found =  `res/media/${currentTheme}/no-results-found.png`;
 }
 
 setAssetTheme();
